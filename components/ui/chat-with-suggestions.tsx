@@ -91,7 +91,7 @@ export function ChatWithSuggestions() {
   const isTyping = lastMessage?.role === "user"
  
   return (
-    <ChatContainer className="flex flex-col h-full">
+    <ChatContainer className="flex flex-col h-full text-base md:text-lg lg:text-xl">
       <div className="py-20 md:py-40 lg:py-80">
         {isEmpty ? (
           <PromptSuggestions

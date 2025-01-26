@@ -16,7 +16,7 @@ export function PromptSuggestions({
         {suggestions.map((suggestion) => (
           <button
             key={suggestion}
-            onClick={() => append({ role: "user", content: suggestion })}
+            onClick={() => append({ role: "user", content: `{"user-input":"${suggestion}"}` })}
             className="h-max flex-1 rounded-xl border bg-background p-4 hover:bg-muted"
           >
             <p>{suggestion}</p>
