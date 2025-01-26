@@ -71,7 +71,7 @@ export default function CarRecommendation() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto">
+      <div className="container mx-auto h-1/2">
         <header className="flex items-center space-x-3 relative top-12">
           <img
             src={"/toyota-logo.png"}
@@ -87,7 +87,7 @@ export default function CarRecommendation() {
         <hr className="border-gray-300 mb-8" />
 
         {/* Top Recommendations */}
-        <div className="h-[33vh] min-h-[300px] mb-8 relative overflow-hidden">
+        <div className="mb-8 relative overflow-hidden">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-full relative">
             {/* Render Old Cards */}
             {oldRecommendations.map((car, index) => (
@@ -119,10 +119,15 @@ export default function CarRecommendation() {
         </div>
 
         {/* Chat Interface */}
-        <div className="absolute top-24">
-          <ChatWithSuggestions/>
-      
+        <div className="fixed bottom-0 left-0 w-full h-1/2 overflow-y-scroll px-12 py-4">
+          <ChatWithSuggestions />
         </div>
+        
+        <style jsx global>{`
+          body {
+            overflow: hidden;
+          }
+        `}</style>
       </div>
     </div>
   )

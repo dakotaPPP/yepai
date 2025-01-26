@@ -1,39 +1,37 @@
-import { useLayoutEffect, useRef } from "react"
+import { useEffect, useRef } from "react"
 
 interface UseAutosizeTextAreaProps {
   ref: React.RefObject<HTMLTextAreaElement>
   maxHeight?: number
   borderWidth?: number
-  dependencies: React.DependencyList
+  dependencies?: any[]
 }
 
 export function useAutosizeTextArea({
   ref,
-  maxHeight = Number.MAX_SAFE_INTEGER,
+  maxHeight = Number.POSITIVE_INFINITY,
   borderWidth = 0,
-  dependencies,
+  dependencies = [],
 }: UseAutosizeTextAreaProps) {
-  const originalHeight = useRef<number | null>(null)
+  const previousHeight = useRef<number>(0)
 
-  useLayoutEffect(() => {
-    if (!ref.current) return
+  useEffect(() => {
+    const element = ref.current
+    if (!element) return
 
-    const currentRef = ref.current
-    const borderAdjustment = borderWidth * 2
+    const resize = () => {
+      element.style.height = "auto"
+      const newHeight = Math.min(element.scrollHeight + borderWidth * 2, maxHeight)
 
-    if (originalHeight.current === null) {
-      originalHeight.current = currentRef.scrollHeight - borderAdjustment
+      if (newHeight !== previousHeight.current) {
+        element.style.height = `${newHeight}px`
+        previousHeight.current = newHeight
+      }
     }
 
-    currentRef.style.removeProperty("height")
-    const scrollHeight = currentRef.scrollHeight
+    resize()
 
-    // Make sure we don't go over maxHeight
-    const clampedToMax = Math.min(scrollHeight, maxHeight)
-    // Make sure we don't go less than the original height
-    const clampedToMin = Math.max(clampedToMax, originalHeight.current)
-
-    currentRef.style.height = `${clampedToMin + borderAdjustment}px`
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [maxHeight, ref, ...dependencies])
+  }, [ref, maxHeight, borderWidth, ...dependencies])
 }
+

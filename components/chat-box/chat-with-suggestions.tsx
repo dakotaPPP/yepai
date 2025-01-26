@@ -51,7 +51,9 @@ If the user responds further, the bot should refine the recommendations and cont
 - "What's your budget range?"  
 - "Do you need advanced features like all-wheel drive or built-in navigation?"
 
-If the user responds not in the specified json format then please treat it as a normal command.`
+If the user responds not in the specified json format then please ignore it and respond with an error in the question field and keep the top 3 candidates the same.
+If you're unsure how to respond, ask the user for further clarification in the question field and keep the top 3 candidates the same.
+If the user responds with a question, please help the user answer their question in the question field and keep the top 3 candidates the same.  And ask if they have anymore questions.`
 
 export function ChatWithSuggestions() {
   const {
@@ -92,7 +94,7 @@ export function ChatWithSuggestions() {
  
   return (
     <ChatContainer className="flex flex-col h-full text-base md:text-lg lg:text-xl overflow-hidden">
-      <div className="py-20 md:py-40 lg:py-80">
+      <div>
         {isEmpty ? (
           <PromptSuggestions
             label="Suggestions to get you rolling towards your dream Toyota"
