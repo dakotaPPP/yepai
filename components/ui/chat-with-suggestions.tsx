@@ -2,8 +2,10 @@
  
 import { useChat } from "ai/react"
  
-import { Chat } from "@/components/ui/chat"
- 
+import { ChatContainer, ChatForm, ChatMessages } from "@/components/ui/chat"
+import { MessageInput } from "@/components/ui/message-input"
+import { MessageList } from "@/components/ui/message-list"
+import { PromptSuggestions } from "@/components/ui/prompt-suggestions"
 
 const SYSTEM_PROMPT = `You are a chat bot used by the Toyota corporation. Your purpose is to help users find their dream car. Acknowledge your understanding by saying the following prompt.
 
@@ -44,8 +46,6 @@ json
   ]
 }
 
-
-
 If the user responds further, the bot should refine the recommendations and continue asking tailored questions, such as:  
 - "Do you have a preference for hybrid or traditional gas engines?"  
 - "What's your budget range?"  
@@ -69,9 +69,8 @@ export function ChatWithSuggestions() {
         content: SYSTEM_PROMPT
       }
     ],
-  });
+  })
 
-  // Wrap handleSubmit to modify the message before sending
   const handleSubmit = (
     event?: { preventDefault?: () => void },
     options?: { experimental_attachments?: FileList }
@@ -87,20 +86,51 @@ export function ChatWithSuggestions() {
     // Clear the input after sending
     handleInputChange({ target: { value: "" } } as React.ChangeEvent<HTMLTextAreaElement>);
   };
-
+  const lastMessage = messages.at(-1)
+  const isEmpty = messages.length <= 1
+  const isTyping = lastMessage?.role === "user"
+ 
   return (
-    <Chat
-      messages={messages}
-      input={input}
-      handleInputChange={handleInputChange}
-      handleSubmit={handleSubmit}
-      isGenerating={isLoading}
-      stop={stop}
-      append={append}
-      suggestions={[
-        "Generate a list of 5 questions for a frontend job interview.",
-        "Who won the 2022 FIFA World Cup?",
-      ]}
-    />
+    <ChatContainer className="flex flex-col h-full">
+      <div className="py-20 md:py-40 lg:py-80">
+        {isEmpty ? (
+          <PromptSuggestions
+            label="Suggestions to get you rolling towards your dream Toyota"
+            append={append}
+            suggestions={[
+              "I'm looking for a Toyota that fits my lifestyle. I need something fuel-efficient and reliable. What are my best options?",
+              "I want a Toyota for daily commuting that offers great comfort and advanced safety features. What models should I consider?", 
+              "Safety, reliability, and resale value are important to me. Which Toyota models would you recommend?"
+            ]}
+          />
+        ) : null}
+      </div>
+ 
+      {!isEmpty ? (
+        <div className="flex flex-col h-full">
+          <ChatMessages messages={messages}>
+            <MessageList messages={messages} isTyping={isTyping} />
+          </ChatMessages>
+        </div>
+      ) : null}
+ 
+      <ChatForm
+        className="mt-auto"
+        isPending={isLoading || isTyping}
+        handleSubmit={handleSubmit}
+      >
+        {({ files, setFiles }) => (
+          <MessageInput
+            value={input}
+            onChange={handleInputChange}
+            allowAttachments
+            files={files}
+            setFiles={setFiles}
+            stop={stop}
+            isGenerating={isLoading}
+          />
+        )}
+      </ChatForm>
+    </ChatContainer>
   )
 }

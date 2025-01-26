@@ -5,8 +5,8 @@ import { ChatWithSuggestions } from "@/components/ui/chat-with-suggestions"
 export default function Home() {
   return (
     <main className="min-h-screen bg-background flex flex-col">
-      <div className="flex-1 h-1/3" /> {/* Top 1/3 empty space */}
-      <div className="h-2/3 p-8"> {/* Bottom 2/3 with chat */}
+      <div className="flex-1 h-1/3 md:h-1/4 lg:h-1/3" /> {/* Top empty space */}
+      <div className="h-2/3 md:h-3/4 lg:h-2/3 p-4 md:p-6 lg:p-8"> {/* Bottom with chat */}
         <ChatWithSuggestions />
       </div>
     </main>
