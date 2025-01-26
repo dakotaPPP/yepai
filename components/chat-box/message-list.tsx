@@ -32,32 +32,26 @@ export function MessageList({
               ? messageOptions(message)
               : messageOptions;
 
-          // For assistant messages, try to parse JSON
-          if (message.role === "assistant") {
-            try {
-              console.log("RESPONSE MESSAGE", message.role);
-              const startIndex = message.content.indexOf("{");
-              const endIndex = message.content.lastIndexOf("}");
-              const jsonContent = message.content.slice(
-                startIndex,
-                endIndex + 1
-              );
-              const parsed = JSON.parse(jsonContent);
 
-              // Return assistant ChatMessage
-              return (
-                <ChatMessage
-                  key={index}
-                  showTimeStamp={showTimeStamps}
-                  {...message}
-                  content={parsed.question || message.content}
-                  {...additionalOptions}
-                />
-              );
-            } catch (e) {
-              // If JSON parsing fails, show typing indicator
-              return <TypingIndicator key={index} />;
-            }
+        // For assistant messages, try to parse JSON
+        if (message.role === "assistant") {
+          try {
+            const startIndex = message.content.indexOf("{");
+            const endIndex = message.content.lastIndexOf("}");
+            const jsonContent = message.content.slice(startIndex,endIndex + 1);
+            const parsed = JSON.parse(jsonContent);
+            return (
+              <ChatMessage
+                key={index}
+                showTimeStamp={showTimeStamps}
+                {...message}
+                content={parsed.question || message.content}
+                {...additionalOptions}
+              />
+            );
+          } catch (e) {
+            // If JSON parsing fails, show typing indicator
+            return <TypingIndicator key={index} />;
           }
 
           // Handle user messages

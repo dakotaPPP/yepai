@@ -3,8 +3,6 @@ export interface Car {
   name: string
   msrp: number
   image: string
-  tags: string[]
-  type: "sedan" | "suv" | "truck" | "hybrid" | "electric"
   link: string
 }
 
