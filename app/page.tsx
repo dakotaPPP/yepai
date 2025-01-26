@@ -41,8 +41,6 @@ export default function CarRecommendation() {
       setRecommendations(cars.slice(4,7)) // Replace with new recommendations
     })
 
-    console.log(recommendations)
-
     // Move to next question
     const nextQuestion = questions.find((q) => q.id === currentQuestion.nextQuestion)
     if (nextQuestion) {
