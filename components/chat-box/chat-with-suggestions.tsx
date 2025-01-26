@@ -7,6 +7,16 @@ import { MessageInput } from "@/components/chat-box/message-input"
 import { MessageList } from "@/components/chat-box/message-list"
 import { PromptSuggestions } from "@/components/chat-box/prompt-suggestions"
 
+import {
+  ChatMessage,
+  type ChatMessageProps,
+  type Message,
+} from "@/components/chat-box/chat-message";
+import { TypingIndicator } from "@/components/chat-box/typing-indicator";
+
+type AdditionalMessageOptions = Partial<Omit<ChatMessageProps, keyof Message>>;
+
+
 const SYSTEM_PROMPT = `You are a chat bot used by the Toyota corporation. Your purpose is to help users find their dream car. Acknowledge your understanding by saying the following prompt.
 
 Hello there! I'm here to help you find your dream Toyota. Let's make this quick and easy.  
@@ -44,6 +54,7 @@ json
       "reasoning": "The Toyota Highlander Hybrid is a spacious, three-row SUV that achieves an impressive 36 mpg combined. Perfect for families, it features luxurious touches like available leather seats, a panoramic moonroof, and an optional 12.3-inch multimedia display. It's the ideal blend of performance, efficiency, and comfort."
     }
   ]
+  "topqualities":
 }
 
 If the user responds further, the bot should refine the recommendations and continue asking tailored questions, such as:  
@@ -56,7 +67,11 @@ If the user responds not in the specified json format then please ignore it and 
 If you're unsure how to respond, ask the user for further clarification in the question field and keep the top 3 candidates the same.
 If the user responds with a question, please help the user answer their question in the question field and keep the top 3 candidates the same.  And ask if they have anymore questions.`
 
-export function ChatWithSuggestions() {
+export function ChatWithSuggestions({
+  onMessagesUpdate,
+}: {
+  onMessagesUpdate?: (messages: any[]) => void;
+}) {
   const {
     messages,
     input,
@@ -67,32 +82,40 @@ export function ChatWithSuggestions() {
   } = useChat({
     initialMessages: [
       {
-        id: 'init',
-        role: 'system',
-        content: SYSTEM_PROMPT
-      }
+        id: "init",
+        role: "system",
+        content: SYSTEM_PROMPT,
+      },
     ],
-  })
+  });
 
   const handleSubmit = (
     event?: { preventDefault?: () => void },
     options?: { experimental_attachments?: FileList }
   ) => {
     event?.preventDefault?.();
-    // Modify the input before sending
-    const modifiedInput = `{"user-input":"${input}"}`
-    // Use append to add the modified message
+  
+    // Format the user's input
+    const modifiedInput = `{"user-input":"${input}"}`;
     append({
       role: "user",
       content: modifiedInput,
     });
-    // Clear the input after sending
+  
+    // Call the onMessagesUpdate callback with updated messages
+    if (onMessagesUpdate) {
+      onMessagesUpdate([...messages, { role: "user", content: modifiedInput }]);
+      console.log("these are teh updates messaages",messages)
+    }
+  
+    // Clear the input
     handleInputChange({ target: { value: "" } } as React.ChangeEvent<HTMLTextAreaElement>);
   };
-  const lastMessage = messages.at(-1)
-  const isEmpty = messages.length <= 1
-  const isTyping = lastMessage?.role === "user"
- 
+
+  const lastMessage = messages.at(-1);
+  const isEmpty = messages.length <= 1;
+  const isTyping = lastMessage?.role === "user";
+
   return (
     <ChatContainer className="flex flex-col h-full text-base md:text-lg lg:text-xl overflow-hidden">
       <div>
@@ -102,21 +125,43 @@ export function ChatWithSuggestions() {
             append={append}
             suggestions={[
               "I'm looking for a Toyota that fits my lifestyle. I need something fuel-efficient and reliable. What are my best options?",
-              "I want a Toyota for daily commuting that offers great comfort and advanced safety features. What models should I consider?", 
-              "Safety, reliability, and resale value are important to me. Which Toyota models would you recommend?"
+              "I want a Toyota for daily commuting that offers great comfort and advanced safety features. What models should I consider?",
+              "Safety, reliability, and resale value are important to me. Which Toyota models would you recommend?",
             ]}
           />
         ) : null}
       </div>
- 
+
       {!isEmpty ? (
         <div className="flex-1 overflow-y-auto">
           <ChatMessages messages={messages}>
-            <MessageList messages={messages} isTyping={isTyping} />
+            <MessageList
+              messages={messages}
+              isTyping={isTyping}
+              messageOptions={(message) => {
+                // For assistant messages, parse JSON and return content
+                if (message.role === "assistant") {
+                  try {
+                    const parsed = JSON.parse(message.content);
+
+                    // Return valid AdditionalMessageOptions (e.g., "content")
+                    return {
+                      content: parsed.question || message.content,
+                    };
+                  } catch (error) {
+                    // Return default fallback
+                    return {};
+                  }
+                }
+
+                // For other messages, return an empty object
+                return {};
+              }}
+            />
+
           </ChatMessages>
         </div>
       ) : null}
- 
       <ChatForm
         className="mt-auto"
         isPending={isLoading || isTyping}
@@ -135,5 +180,5 @@ export function ChatWithSuggestions() {
         )}
       </ChatForm>
     </ChatContainer>
-  )
+  );
 }

@@ -14,7 +14,6 @@
   "dependencies": {
     "@ai-sdk/openai": "^1.1.2",
     "@hookform/resolvers": "^3.9.1",
-    "@prisma/client": "^6.2.1",
     "@radix-ui/react-accordion": "^1.2.2",
     "@radix-ui/react-alert-dialog": "^1.1.4",
     "@radix-ui/react-aspect-ratio": "^1.1.1",
@@ -50,6 +49,7 @@
     "cmdk": "1.0.4",
     "embla-carousel-react": "8.5.1",
     "framer-motion": "^11.18.2",
+    "fs": "^0.0.1-security",
     "gsap": "^3.12.7",
     "input-otp": "1.4.1",
     "lucide-react": "^0.454.0",
@@ -74,13 +74,15 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@prisma/client": "^6.2.1",
     "@types/node": "^22",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "csv-parser": "^3.1.0",
     "postcss": "^8",
     "prisma": "^6.2.1",
     "tailwindcss": "^3.4.17",
     "ts-node": "^10.9.2",
-    "typescript": "^5"
+    "typescript": "^5.7.3"
   }
 }
