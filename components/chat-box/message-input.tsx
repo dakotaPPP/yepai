@@ -7,8 +7,8 @@ import { omit } from "remeda"
 
 import { cn } from "@/lib/utils"
 import { useAutosizeTextArea } from "@/hooks/use-autosize-textarea"
-import { Button } from "@/components/ui/button"
-import { FilePreview } from "@/components/ui/file-preview"
+import { Button } from "@/components/chat-box/button"
+import { FilePreview } from "@/components/chat-box/file-preview"
 
 interface MessageInputBaseProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {

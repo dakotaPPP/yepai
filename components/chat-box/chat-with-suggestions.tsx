@@ -2,10 +2,10 @@
  
 import { useChat } from "ai/react"
  
-import { ChatContainer, ChatForm, ChatMessages } from "@/components/ui/chat"
-import { MessageInput } from "@/components/ui/message-input"
-import { MessageList } from "@/components/ui/message-list"
-import { PromptSuggestions } from "@/components/ui/prompt-suggestions"
+import { ChatContainer, ChatForm, ChatMessages } from "@/components/chat-box/chat"
+import { MessageInput } from "@/components/chat-box/message-input"
+import { MessageList } from "@/components/chat-box/message-list"
+import { PromptSuggestions } from "@/components/chat-box/prompt-suggestions"
 
 const SYSTEM_PROMPT = `You are a chat bot used by the Toyota corporation. Your purpose is to help users find their dream car. Acknowledge your understanding by saying the following prompt.
 
@@ -91,7 +91,7 @@ export function ChatWithSuggestions() {
   const isTyping = lastMessage?.role === "user"
  
   return (
-    <ChatContainer className="flex flex-col h-full text-base md:text-lg lg:text-xl">
+    <ChatContainer className="flex flex-col h-full text-base md:text-lg lg:text-xl overflow-hidden">
       <div className="py-20 md:py-40 lg:py-80">
         {isEmpty ? (
           <PromptSuggestions
@@ -107,7 +107,7 @@ export function ChatWithSuggestions() {
       </div>
  
       {!isEmpty ? (
-        <div className="flex flex-col h-full">
+        <div className="flex-1 overflow-y-auto">
           <ChatMessages messages={messages}>
             <MessageList messages={messages} isTyping={isTyping} />
           </ChatMessages>

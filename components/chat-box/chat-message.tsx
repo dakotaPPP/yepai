@@ -5,8 +5,8 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { Code2, Loader2, Terminal } from "lucide-react"
 
 import { cn } from "@/lib/utils"
-import { FilePreview } from "@/components/ui/file-preview"
-import { MarkdownRenderer } from "@/components/ui/markdown-renderer"
+import { FilePreview } from "@/components/chat-box/file-preview"
+import { MarkdownRenderer } from "@/components/chat-box/markdown-renderer"
 
 const chatBubbleVariants = cva(
   "group/message relative break-words rounded-lg p-3 text-sm sm:max-w-[70%]",
