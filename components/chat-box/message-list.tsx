@@ -38,7 +38,6 @@ export function MessageList({
             const startIndex = message.content.indexOf("{");
             const endIndex = message.content.lastIndexOf("}");
             const jsonContent = message.content.slice(startIndex,endIndex + 1);
-            console.log(jsonContent)
             const parsed = JSON.parse(jsonContent);
             return (
               <ChatMessage
