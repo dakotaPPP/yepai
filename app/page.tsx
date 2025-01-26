@@ -7,6 +7,7 @@ import type { Car, Message, Question } from "../types/cars"
 import { CarCard } from "../components/car-card"
 import { ChatInterface } from "../components/chat-interface"
 import { motion, AnimatePresence} from "framer-motion"
+import { ChatWithSuggestions } from "@/components/chat-box/chat-with-suggestions"
 
 export default function CarRecommendation() {
   const [currentQuestion, setCurrentQuestion] = useState<Question>(questions[0])
@@ -118,14 +119,9 @@ export default function CarRecommendation() {
         </div>
 
         {/* Chat Interface */}
-        <div style={{ height: "45vh", minHeight: "100px" }}>
-          <Card className="h-full">
-            <ChatInterface
-              messages={messages}
-              currentQuestion="Type your response here..."
-              onSendMessage={handleMessage}
-            />
-          </Card>
+        <div className="absolute top-24">
+          <ChatWithSuggestions/>
+      
         </div>
       </div>
     </div>
