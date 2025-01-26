@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react"
 import { Card } from "@/components/ui/card"
 import { cars, questions } from "../data/cars"
 import type { Car, Message, Question } from "../types/cars"
-import { CarCard } from "../components/car-card"
+import { CarCard } from "../components/frontpage-ui/car-card"
 import { motion, AnimatePresence} from "framer-motion"
 import { ChatWithSuggestions } from "@/components/chat-box/chat-with-suggestions"
 

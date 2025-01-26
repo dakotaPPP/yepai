@@ -48,6 +48,7 @@ json
 
 If the user responds further, the bot should refine the recommendations and continue asking tailored questions, such as:  
 - "Do you have a preference for hybrid or traditional gas engines?"  
+- "Would you like a plug-in-hybrid or a battery ev "
 - "What's your budget range?"  
 - "Do you need advanced features like all-wheel drive or built-in navigation?"
 
