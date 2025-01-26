@@ -1,0 +1,77 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql" // Change to your database provider
+  url      = env("DATABASE_URL")
+}
+
+model Year {
+  id    Int     @id @default(autoincrement())
+  year  Int     @unique
+  cars  Car[]
+}
+
+model Car {
+  id              Int        @id @default(autoincrement())
+  make            String?
+  model           String
+  series          String?
+  startingMsrp    Float?
+  asShownPrice    String
+  mileageInfo     String?
+  seatingCapacity Int?
+  fuelType        String?
+  imageUrl        String?
+  buildLink       String?
+  exploreLink     String?
+  trims           Trim[]
+  yearId          Int
+  year            Year       @relation(fields: [yearId], references: [id], onDelete: Cascade)
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  @@unique([model, yearId])
+}
+
+model Trim {
+  id        Int        @id @default(autoincrement())
+  trimName  String
+  msrp      Float
+  buildUrl  String
+  imageUrl  String
+  mpg       String
+  carId     Int
+  car       Car        @relation(fields: [carId], references: [id], onDelete: Cascade)
+  specs     Spec[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model Spec {
+  id        Int      @id @default(autoincrement())
+  category  String
+  name      String
+  price     Float?
+  details   String?
+  color        String 
+  colorImgUrl  String
+  interColor   String
+  transmission String
+  driveTrain   String
+  trimId    Int
+  trim      Trim     @relation(fields: [trimId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+
+
