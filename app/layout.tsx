@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Find your Toyota',
-  description: 'Created with v0',
+  title: 'Toyota Matchmaker',
+  description: 'Utilize AI to find your dream Toyota!',
 }
 
 export default function RootLayout({
