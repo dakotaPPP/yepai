@@ -11,47 +11,7 @@ import  PrismaAddButton  from '@/components/prismadd'
 
 
 export default function CarRecommendation() {
-  const [currentQuestion, setCurrentQuestion] = useState<Question>(questions[0])
   const [recommendations, setRecommendations] = useState<Car[]>(cars.slice(0, 3))
-  const [chatMessages, setChatMessages] = useState<any[]>([]);
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: "initial",
-      content: questions[0].text,
-      type: "bot",
-      timestamp: Date.now(),
-    },
-  ])
-
-  
-  let innum: number = 1;
-  const handleMessagesUpdate = (updatedMessages: any) => {
-    let jsonResponse: string;
-    innum += 1;
-
-   
-    
-    console.log("Updated messages:", updatedMessages);
-    setChatMessages(updatedMessages); // Store messages in state if needed
-
-    if (updatedMessages.len() > 2)
-    {
-      jsonResponse = updatedMessages[innum].content
-    }
-    const parsedResponse = JSON.parse(jsonResponse);
-
-      // Extract candidates and transform to Car[]
-      const cars: Car[] = parsedResponse.candidates.map((candidate: any) => ({
-        model: candidate.model,
-        certainty: candidate.certainty,
-        reasoning: candidate.reasoning,
-      }));
-
-      setRecommendations(cars); 
-
-  
-  };
-  
 
   return (
     <div className="min-h-screen bg-background">
@@ -91,7 +51,7 @@ export default function CarRecommendation() {
 
         {/* Chat Interface */}
         <div className="fixed bottom-0 left-0 w-full h-1/2 overflow-y-scroll px-12 py-4">
-          <ChatWithSuggestions onMessagesUpdate={handleMessagesUpdate} />
+          <ChatWithSuggestions />
         </div>
         
         <style jsx global>{`
