@@ -5,111 +5,45 @@ export const cars: Car[] = [
     id: "corolla-2025",
     name: "2025 Corolla",
     msrp: 22325,
-    image:
+    imageUrl:
       "https://www.toyota.com/imgix/content/dam/toyota/jellies/relative/2025/corolla/base.png",
     tags: ["efficient", "compact", "affordable"],
     type: "sedan",
     link: "https://toyota.com",
+    certainty: '90%',
   },
   {
     id: "camry-2025",
     name: "2025 Camry",
     msrp: 28700,
-    image:
+    imageUrl:
       "https://www.toyota.com/imgix/content/dam/toyota/jellies/relative/2025/grsupra/base.png",
     tags: ["spacious", "reliable", "comfortable"],
     type: "sedan",
     link: "https://toyota.com",
+    certainty: '90%',
   },
   {
     id: "rav4-2025",
     name: "2025 RAV4",
     msrp: 30725,
-    image:
+    imageUrl:
       "https://www.toyota.com/imgix/content/dam/toyota/jellies/relative/2025/grsupra/base.png",
     tags: ["suv", "versatile", "popular"],
     type: "suv",
     link: "https://toyota.com",
+    certainty: '90%',
   },
   {
     id: "highlander-2025",
     name: "2025 Highlander",
     msrp: 36620,
-    image:
+    imageUrl:
       "	https://www.toyota.com/imgix/content/dam/toyota/jellies/relative/2025/grsupra/base.png",
     tags: ["family", "spacious", "suv"],
     type: "suv",
     link: "https://toyota.com",
-  },
-  {
-    id: "highlander-2025",
-    name: "2025 Highlander",
-    msrp: 36620,
-    image:
-      "	https://www.toyota.com/imgix/content/dam/toyota/jellies/relative/2025/grsupra/base.png",
-    tags: ["family", "spacious", "suv"],
-    type: "suv",
-    link: "https://toyota.com",
-  },
-  {
-    id: "highlander-2025",
-    name: "2025 Highlander",
-    msrp: 36620,
-    image:
-      "	https://www.toyota.com/imgix/content/dam/toyota/jellies/relative/2025/grsupra/base.png",
-    tags: ["family", "spacious", "suv"],
-    type: "suv",
-    link: "https://toyota.com",
-  },
-  {
-    id: "highlander-2025",
-    name: "2025 Highlander",
-    msrp: 36620,
-    image:
-      "	https://www.toyota.com/imgix/content/dam/toyota/jellies/relative/2025/grsupra/base.png",
-    tags: ["family", "spacious", "suv"],
-    type: "suv",
-    link: "https://toyota.com",
-  },
-  {
-    id: "highlander-2025",
-    name: "2025 Highlander",
-    msrp: 36620,
-    image:
-      "	https://www.toyota.com/imgix/content/dam/toyota/jellies/relative/2025/grsupra/base.png",
-    tags: ["family", "spacious", "suv"],
-    type: "suv",
-    link: "https://toyota.com",
-  },
-  {
-    id: "highlander-2025",
-    name: "2025 Highlander",
-    msrp: 36620,
-    image:
-      "	https://www.toyota.com/imgix/content/dam/toyota/jellies/relative/2025/grsupra/base.png",
-    tags: ["family", "spacious", "suv"],
-    type: "suv",
-    link: "https://toyota.com",
-  },
-  {
-    id: "highlander-2025",
-    name: "2025 Highlander",
-    msrp: 36620,
-    image:
-      "	https://www.toyota.com/imgix/content/dam/toyota/jellies/relative/2025/grsupra/base.png",
-    tags: ["family", "spacious", "suv"],
-    type: "suv",
-    link: "https://toyota.com",
-  },
-  {
-    id: "highlander-2025",
-    name: "2025 Highlander",
-    msrp: 36620,
-    image:
-      "	https://www.toyota.com/imgix/content/dam/toyota/jellies/relative/2025/grsupra/base.png",
-    tags: ["family", "spacious", "suv"],
-    type: "suv",
-    link: "https://toyota.com",
+    certainty: '90%',
   },
 ]
 

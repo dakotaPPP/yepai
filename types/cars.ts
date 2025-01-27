@@ -2,10 +2,11 @@ export interface Car {
   id: string
   name: string
   msrp: number
-  image: string
+  imageUrl: string
   tags: string[]
   type: "sedan" | "suv" | "truck" | "hybrid" | "electric"
   link: string
+  certainty : string
 }
 
 export interface Message {

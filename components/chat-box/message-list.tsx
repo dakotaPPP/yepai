@@ -35,12 +35,12 @@ export function MessageList({
         // For assistant messages, try to parse JSON
         if (message.role === "assistant") {
           try {
-            console.log('RESPONSE MESSAGE', message.role)
+            // console.log('RESPONSE MESSAGE', message.role)
             const startIndex = message.content.indexOf("{");
             const endIndex = message.content.lastIndexOf("}");
             const jsonContent = message.content.slice(startIndex,endIndex + 1);
-            console.log(jsonContent)
             const parsed = JSON.parse(jsonContent);
+
             return (
               <ChatMessage
                 key={index}
