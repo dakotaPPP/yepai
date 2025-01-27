@@ -6,11 +6,14 @@ import type { Car, Message, Question } from "../types/cars"
 import { CarCard } from "@/components/frontpage-ui/car-card"
 import { motion, AnimatePresence} from "framer-motion"
 import { ChatWithSuggestions } from "@/components/chat-box/chat-with-suggestions"
+import  PrismaAddButton  from '@/components/prismadd'
+
+
 
 export default function CarRecommendation() {
   const [currentQuestion, setCurrentQuestion] = useState<Question>(questions[0])
   const [recommendations, setRecommendations] = useState<Car[]>(cars.slice(0, 3))
-  const [oldRecommendations, setOldRecommendations] = useState<Car[]>([]) // To store old cards
+  const [chatMessages, setChatMessages] = useState<any[]>([]);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "initial",
@@ -94,6 +97,7 @@ export default function CarRecommendation() {
             ))}
           </div>
         </div>
+
 
         {/* Chat Interface */}
         <div className="fixed bottom-0 left-0 w-full h-1/2 overflow-y-scroll px-12 py-4">

@@ -62,6 +62,7 @@ json
         certainty: '70%',
     }
   ]
+  "topqualities":
 }
 
 If the user responds further, the bot should refine the recommendations and continue asking tailored questions, such as:  
@@ -91,26 +92,33 @@ export function ChatWithSuggestions( {onSendData} : ChatBoxProps) {
   } = useChat({
     initialMessages: [
       {
-        id: 'init',
-        role: 'system',
-        content: SYSTEM_PROMPT
-      }
+        id: "init",
+        role: "system",
+        content: SYSTEM_PROMPT,
+      },
     ],
-  })
+  });
 
   const handleSubmit = (
     event?: { preventDefault?: () => void },
     options?: { experimental_attachments?: FileList }
   ) => {
     event?.preventDefault?.();
-    // Modify the input before sending
-    const modifiedInput = `{"user-input":"${input}"}`
-    // Use append to add the modified message
+  
+    // Format the user's input
+    const modifiedInput = `{"user-input":"${input}"}`;
     append({
       role: "user",
       content: modifiedInput,
     });
-    // Clear the input after sending
+  
+    // Call the onMessagesUpdate callback with updated messages
+    if (onMessagesUpdate) {
+      onMessagesUpdate([...messages, { role: "user", content: modifiedInput }]);
+      console.log("these are teh updates messaages",messages)
+    }
+  
+    // Clear the input
     handleInputChange({ target: { value: "" } } as React.ChangeEvent<HTMLTextAreaElement>);
   };
   const lastMessage = messages.at(-1)
@@ -162,21 +170,43 @@ export function ChatWithSuggestions( {onSendData} : ChatBoxProps) {
             append={append}
             suggestions={[
               "I'm looking for a Toyota that fits my lifestyle. I need something fuel-efficient and reliable. What are my best options?",
-              "I want a Toyota for daily commuting that offers great comfort and advanced safety features. What models should I consider?", 
-              "Safety, reliability, and resale value are important to me. Which Toyota models would you recommend?"
+              "I want a Toyota for daily commuting that offers great comfort and advanced safety features. What models should I consider?",
+              "Safety, reliability, and resale value are important to me. Which Toyota models would you recommend?",
             ]}
           />
         ) : null}
       </div>
- 
+
       {!isEmpty ? (
         <div className="flex-1 overflow-y-auto">
           <ChatMessages messages={messages}>
-            <MessageList messages={messages} isTyping={isTyping} />
+            <MessageList
+              messages={messages}
+              isTyping={isTyping}
+              messageOptions={(message) => {
+                // For assistant messages, parse JSON and return content
+                if (message.role === "assistant") {
+                  try {
+                    const parsed = JSON.parse(message.content);
+
+                    // Return valid AdditionalMessageOptions (e.g., "content")
+                    return {
+                      content: parsed.question || message.content,
+                    };
+                  } catch (error) {
+                    // Return default fallback
+                    return {};
+                  }
+                }
+
+                // For other messages, return an empty object
+                return {};
+              }}
+            />
+
           </ChatMessages>
         </div>
       ) : null}
- 
       <ChatForm
         className="mt-auto"
         isPending={isLoading || isTyping}
@@ -195,5 +225,5 @@ export function ChatWithSuggestions( {onSendData} : ChatBoxProps) {
         )}
       </ChatForm>
     </ChatContainer>
-  )
+  );
 }
