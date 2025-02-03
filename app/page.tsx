@@ -1,60 +1,20 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
-import { cars, questions } from "../data/cars"
-import type { Car, Message, Question } from "../types/cars"
+import { useState } from "react"
+import { cars } from "../data/cars"
+import type { Car } from "../types/cars"
 import { CarCard } from "@/components/frontpage-ui/car-card"
-import { motion, AnimatePresence} from "framer-motion"
+import { motion} from "framer-motion"
 import { ChatWithSuggestions } from "@/components/chat-box/chat-with-suggestions"
-import  PrismaAddButton  from '@/components/prismadd'
 
 
 
 export default function CarRecommendation() {
-  const [currentQuestion, setCurrentQuestion] = useState<Question>(questions[0])
-  const [recommendations, setRecommendations] = useState<Car[]>(cars.slice(0, 3))
-  const [chatMessages, setChatMessages] = useState<any[]>([]);
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: "initial",
-      content: questions[0].text,
-      type: "bot",
-      timestamp: Date.now(),
-    },
-  ])
 
-  const handleMessage = (message: string) => {
-    // Add user message
-    setMessages((prev) => [
-      ...prev,
-      {
-        id: `user-${Date.now()}`,
-        content: message,
-        type: "user",
-        timestamp: Date.now(),
-      },
-    ])
-    
-    // Move to next question
-    const nextQuestion = questions.find((q) => q.id === currentQuestion.nextQuestion)
-    if (nextQuestion) {
-      setCurrentQuestion(nextQuestion)
-      setTimeout(() => {
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: `bot-${Date.now()}`,
-            content: nextQuestion.text,
-            type: "bot",
-            timestamp: Date.now(),
-          },
-        ])
-      }, 500)
-    }
-  }
+  const [recommendations, setRecommendations] = useState<Car[]>(cars.slice(0, 3))
+ 
 
   const handleGPTtext = (newrecomendations : Car[]) => {
-    console.log("front end recomendations",newrecomendations)
 
     setRecommendations(newrecomendations.slice(0, 3))
 
