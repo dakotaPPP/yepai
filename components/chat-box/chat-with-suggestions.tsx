@@ -121,6 +121,10 @@ export function ChatWithSuggestions( {onSendData} : ChatBoxProps) {
     // Clear the input
     handleInputChange({ target: { value: "" } } as React.ChangeEvent<HTMLTextAreaElement>);
   };
+
+  const handleResponse = () => {
+
+  }
   const lastMessage = messages.at(-1)
   const isEmpty = messages.length <= 1
   const isTyping = lastMessage?.role === "user"
@@ -128,6 +132,8 @@ export function ChatWithSuggestions( {onSendData} : ChatBoxProps) {
   // console.log('lastMessage',lastMessage?.content)
   // console.log("this is is typing",isTyping)
   // console.log('full message', messages)
+
+  console.log('checking if loading',isLoading)
 
 
   useEffect(() => {
@@ -139,14 +145,17 @@ export function ChatWithSuggestions( {onSendData} : ChatBoxProps) {
         return
       }
 
-     if (lastMessage.role === "assistant") {
-        console.log(lastMessage.content )
+     if (lastMessage.role === "assistant" ) {
+        console.log(lastMessage.content)
         try {
-          // console.log('RESPONSE MESSAGE', message.role)
+          console.log('RESPONSE MESSAGE', lastMessage.content)
           const startIndex = lastMessage.content.indexOf("{");
           const endIndex = lastMessage.content.lastIndexOf("}");
           const jsonContent = lastMessage.content.slice(startIndex,endIndex + 1);
           const parsed = JSON.parse(jsonContent);
+
+          handleResponse()
+
           onSendData(parsed.candidates)
 
           
@@ -180,29 +189,7 @@ export function ChatWithSuggestions( {onSendData} : ChatBoxProps) {
       {!isEmpty ? (
         <div className="flex-1 overflow-y-auto">
           <ChatMessages messages={messages}>
-            <MessageList
-              messages={messages}
-              isTyping={isTyping}
-              messageOptions={(message) => {
-                // For assistant messages, parse JSON and return content
-                if (message.role === "assistant") {
-                  try {
-                    const parsed = JSON.parse(message.content);
-
-                    // Return valid AdditionalMessageOptions (e.g., "content")
-                    return {
-                      content: parsed.question || message.content,
-                    };
-                  } catch (error) {
-                    // Return default fallback
-                    return {};
-                  }
-                }
-
-                // For other messages, return an empty object
-                return {};
-              }}
-            />
+            <MessageList messages={messages} isTyping={isTyping}/>
 
           </ChatMessages>
         </div>
