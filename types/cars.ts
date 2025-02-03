@@ -22,3 +22,11 @@ export interface Question {
   nextQuestion: string
 }
 
+export interface Topqualities {
+  minprice: number,
+  maxprice: number,
+  fuelType: "Hybrid EV" | "Battery EV" | "Fuel Cell EV" | "Plug-in Hybrid EV",
+  model: string | null
+    
+}
+

@@ -13,16 +13,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Year {
-  id    Int     @id @default(autoincrement())
-  year  Int     @unique
-  cars  Car[]
-}
-
 model Car {
   id              Int        @id @default(autoincrement())
   make            String?
   model           String
+  year            Int
   series          String?
   startingMsrp    Float?
   asShownPrice    String
@@ -33,12 +28,10 @@ model Car {
   buildLink       String?
   exploreLink     String?
   trims           Trim[]
-  yearId          Int
-  year            Year       @relation(fields: [yearId], references: [id], onDelete: Cascade)
   createdAt       DateTime   @default(now())
   updatedAt       DateTime   @updatedAt
 
-  @@unique([model, yearId])
+  @@unique([model, year])
 }
 
 model Trim {
