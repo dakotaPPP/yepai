@@ -16,7 +16,7 @@ export function CarCard({ car, index }: CarCardProps) {
   return (
 
 
-      <Link href = {car.link}>
+      <Link href={car.link || "https://www.toyota.com"}>
        
           <Card className="overflow-hidden h-full">
             <CardContent className="p-6">

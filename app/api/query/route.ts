@@ -1,11 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { fromEntries } from "remeda";
 
 export async function POST(req: NextRequest) {
   const { minprice, maxprice, fuelType, model} = await req.json()
-
-  console.log('this is min price', minprice)
-  console.log('this is max price', maxprice)
 
   const where: any = {};
 
@@ -17,13 +15,13 @@ export async function POST(req: NextRequest) {
     where.startingMsrp = { ...(where.startingMsrp || {}), lte: maxprice };
   }
 
-  if (fuelType) {
-    where.fuelType = fuelType;
-  }
+  // if (fuelType) {
+  //   where.fuelType = fuelType;
+  // }
 
-  if (model) {
-    where.model = model;
-  }
+  // if (model) {
+  //   where.model = model;
+  // }
 
 
   // // Step 2: Query Prisma database using JSON values
@@ -40,7 +38,6 @@ export async function POST(req: NextRequest) {
     },
   });
 
-  console.log('this is db query', dbQueryResult)
 
  
   // // Step 3: Format the database query results
@@ -57,9 +54,8 @@ export async function POST(req: NextRequest) {
     formattedResponse = { error: "No results found" };
   }
 
-  console.log('This is formatted response', formattedResponse)
-  console.log("formatted response completed")
 
-  return NextResponse.json({response: "null"})
+
+  return NextResponse.json(formattedResponse)
 
 }

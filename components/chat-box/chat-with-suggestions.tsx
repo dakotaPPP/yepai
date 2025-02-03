@@ -9,86 +9,94 @@ import { PromptSuggestions } from "@/components/chat-box/prompt-suggestions"
 import { useEffect } from "react";
 
 
-// "candidates": [
-//   {
-//     id: "supra-2025",
-//     name: "2025 Supra",
-//     msrp: 22325,
-//     imageUrl:
-//       "https://www.toyota.com/imgix/content/dam/toyota/jellies/relative/2025/corolla/base.png",
-//     tags: ["efficient", "compact", "affordable"],
-//     type: "sedan",
-//     link: "https://toyota.com",
-//     certainty: '90%',
-//   },
-//   {
-//     id: "camry-2025",
-//     name: "2025 Super",
-//     msrp: 28700,
-//     imageUrl:
-//       "https://www.toyota.com/imgix/content/dam/toyota/jellies/relative/2025/grsupra/base.png",
-//     tags: ["spacious", "reliable", "comfortable"],
-//     type: "sedan",
-//     link: "https://toyota.com",
-//     certainty: '80%',
-//   },
-//   {
-//     id: "rav4-2025",
-//     name: "2025 Supra",
-//     msrp: 30725,
-//     imageUrl:
-//       "https://www.toyota.com/imgix/content/dam/toyota/jellies/relative/2025/grsupra/base.png",
-//     tags: ["suv", "versatile", "popular"],
-//     type: "suv",
-//     link: "https://toyota.com",
-//     certainty: '70%',
-// }
-// ]
 
-const SYSTEM_PROMPT = `You are a chat bot used by the Toyota corporation. Your purpose is to help users find their dream car. 
+const SYSTEM_PROMPT = `
 
-Your purpose is to provide with a tailored question to help narow down the users dream car, and to provide with the top qualities that they are looking in the fromat of the example provided below.
+### Key Differences Between \`"user"\` and \`"data"\` Role Handling:
 
-Acknowledge your understanding by saying the following prompt.
+| Role   | Purpose | Response Structure |
+|--------|---------|--------------------|
+| \`"user"\` | User-provided input to refine preferences | Returns \`"question"\` for further narrowing and \`"topqualities"\` based on preferences. |
+| \`"data"\` | Fetching car recommendations from the database | Returns a \`"candidates"\` list of matching cars with certainty percentages. |
 
-Hello there! I'm here to help you find your dream Toyota. Let's make this quick and easy.  
 
-To start, what kind of car are you looking for? For example, do you want something sporty, spacious, fuel-efficient, or maybe all of the above?  
+You are a chatbot used by the Toyota corporation. Your purpose is to help users find their dream car.
 
-As we chat, I'll recommend the top three Toyotas that match your preferences. Let me know your thoughts!
-
+Your job is to ask tailored questions to narrow down the user's dream car and provide the top qualities they are looking for in the required format.
 
 ---
 
-When the user responds in the specified JSON format, the bot will output in the required JSON format:
+### Handling User Responses (\`role: "user"\`)
+When the user responds in the specified **JSON format**, the bot will output in the required JSON format:
 
 Example after user response:  
-{"user-input":"I want a hybrid."} 
+{"user-input":"I want a hybrid."}  
 Bot sample response:  
-json
+\`\`\`json
 {
   "question": "Do you prefer a compact hybrid, an SUV hybrid, or a larger hybrid vehicle for your needs?",
   "topqualities": 
     {
-      minprice: provide an int
-      maxprice: provide an int
-      fuelType: provide one of the following Gasoline, Hybrid EV, Battery EV, Fuel Cell EV, Plug-in Hybrid EV
-      model: if narowed down you could provide a model name else return null for this category
+      minprice: provide an int,
+      maxprice: provide an int,
+      fuelType: provide one of the following: Gasoline, Hybrid EV, Battery EV, Fuel Cell EV, Plug-in Hybrid EV,
+      model: if narrowed down, provide a model name, else return null for this category
     }
-  
-
 }
+\`\`\`
 
-If the user responds further, the bot should refine the recommendations and continue asking tailored questions, such as:  
-- "Do you have a preference for hybrid or traditional gas engines?"  
-- "Would you like a plug-in-hybrid or a battery ev "
-- "What's your budget range?"  
-- "Do you need advanced features like all-wheel drive or built-in navigation?"
+---
 
-If the user responds not in the specified json format then please ignore it and respond with an error in the question field and keep the topqualities the same.
-If you're unsure how to respond, ask the user for further clarification in the question field and keep the topqualities.
-If the user responds with a question, please help the user answer their question in the question field and keep the topqualities the same.  And ask if they have anymore questions.
-If given a lower range but not a higher range estimate a higher range, if given a higher range but not a lower range estimate a lower range`
+### Handling Database Responses (\`role: "data"\`)
+If the **role** is \`"data"\`, the bot should return results from the database and structure the response as follows:
+
+Example database response:
+\`\`\`json
+{
+  "candidates": [
+    {
+      "id": sample id from database,
+      "name": model name from database,
+      "msrp": price as an int,
+      "imageUrl": image URL from database,
+      "tags": ["tag1", "tag2", "tag3"],
+      "type": type from database (e.g., "sedan", "SUV"),
+      "link": car's build URL from the database,
+      "certainty": "percentage of match certainty"
+    },
+    {
+      "id": sample id from database,
+      "name": model name from database,
+      "msrp": price as an int,
+      "imageUrl": image URL from database,
+      "tags": ["tag1", "tag2", "tag3"],
+      "type": type from database (e.g., "sedan", "SUV"),
+      "link": car's build URL from the database,
+      "certainty": "percentage of match certainty"
+    },
+    {
+      "id": sample id from database,
+      "name": model name from database,
+      "msrp": price as an int,
+      "imageUrl": image URL from database,
+      "tags": ["tag1", "tag2", "tag3"],
+      "type": type from database (e.g., "sedan", "SUV"),
+      "link": car's build URL from the database,
+      "certainty": "percentage of match certainty"
+    }
+  ]
+}
+\`\`\`
+
+The \`"candidates"\` section should be **populated using database information**, ensuring the most relevant vehicles are shown based on user preferences.
+
+- If **no matches** are found, generate alternative Toyota models that fit the user’s criteria.  
+- The \`"certainty"\` field should **indicate how well each vehicle matches** the user's needs.
+
+---
+
+
+`
 
 
 
@@ -129,10 +137,10 @@ export function ChatWithSuggestions( {onSendData} : ChatBoxProps) {
     });
   
     // Call the onMessagesUpdate callback with updated messages
-    if (onMessagesUpdate) {
-      onMessagesUpdate([...messages, { role: "user", content: modifiedInput }]);
+    // if (onMessagesUpdate) {
+    //   onMessagesUpdate([...messages, { role: "user", content: modifiedInput }]);
       
-    }
+    // }
   
     // Clear the input
     handleInputChange({ target: { value: "" } } as React.ChangeEvent<HTMLTextAreaElement>);
@@ -140,7 +148,6 @@ export function ChatWithSuggestions( {onSendData} : ChatBoxProps) {
 
   const handleResponse = async (qualities:Topqualities) => {
     try{
-      console.log('pared in handle response ', qualities)
       const response = await fetch("/api/query",{
         method: "POST",
         headers: {
@@ -148,14 +155,20 @@ export function ChatWithSuggestions( {onSendData} : ChatBoxProps) {
         },
         body: JSON.stringify(qualities),
       });
-      const data = response.json();
-      return data
+
+      const data = await response.json();
+
+      const modifiedInput = JSON.stringify({ "system-input": data })
+
+      append({
+        role: "system",
+        content: modifiedInput,
+      });
+      
     }
     catch(e){
       console.log('Failed To fetch topqualities', e)
     }
- 
-
 
     
   }
@@ -163,9 +176,7 @@ export function ChatWithSuggestions( {onSendData} : ChatBoxProps) {
   const isEmpty = messages.length <= 1
   const isTyping = lastMessage?.role === "user"
 
-  // console.log('lastMessage',lastMessage?.content)
-  // console.log("this is is typing",isTyping)
-  // console.log('full message', messages)
+
 
 
   useEffect(() => {
@@ -181,17 +192,19 @@ export function ChatWithSuggestions( {onSendData} : ChatBoxProps) {
      if (lastMessage.role === "assistant" ) {
     
         try {
-          console.log('RESPONSE MESSAGE', lastMessage.content)
+          
           const startIndex = lastMessage.content.indexOf("{");
           const endIndex = lastMessage.content.lastIndexOf("}");
           const jsonContent = lastMessage.content.slice(startIndex,endIndex + 1);
           const parsed = JSON.parse(jsonContent);
 
-          console.log('usestate parsed', parsed)
+          if(parsed.topqualities){
+            handleResponse(parsed.topqualities)
+          }
 
-          handleResponse(parsed.topqualities)
-
-          // onSendData(parsed.candidates)
+          
+          if(parsed.candidates)
+            onSendData(parsed.candidates)
 
           
         } catch (e) {

@@ -39,15 +39,21 @@ export function MessageList({
             const endIndex = message.content.lastIndexOf("}");
             const jsonContent = message.content.slice(startIndex,endIndex + 1);
             const parsed = JSON.parse(jsonContent);
-            return (
-              <ChatMessage
-                key={index}
-                showTimeStamp={showTimeStamps}
-                {...message}
-                content={parsed.question || message.content}
-                {...additionalOptions}
-              />
-            );
+
+            if(parsed.candidates){
+              return(null)
+            }
+              return (
+                <ChatMessage
+                  key={index}
+                  showTimeStamp={showTimeStamps}
+                  {...message}
+                  content={parsed.question || message.content}
+                  {...additionalOptions}
+                />
+              );
+            
+          
           } catch (e) {
             // If JSON parsing fails, show typing indicator
             return <TypingIndicator key={index} />;
@@ -69,7 +75,7 @@ export function MessageList({
           />
         )
       })}
-      {isTyping && <TypingIndicator />}
+      {/* {isTyping && <TypingIndicator />} */}
     </div>
   )
 }
